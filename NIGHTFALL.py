@@ -18,13 +18,19 @@ import player, egg
 
 # VARIABLES
 
-state = None # Para indicar en que parte del juego estamos
+state = "menuScreen" # Para indicar en que parte del juego estamos
+
+spacePressed = False
+spaceReleased = False
+huevera = [] # Para guardar todos los objetos huevo
+timeForEggs = 3000 # Para almacenar el instante en el que se ha creado el último huevo
 
 # CONSTANTS
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 700
 FPS = 30
+TIMEBETWEENEGGS = 3000
 
 # PYGAME OBJECTS
 
@@ -32,6 +38,9 @@ pygame.display.init()
 surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT),pygame.RESIZABLE)
 pygame.display.set_caption('NIGHTFALL')
 clock = GAME_TIME.Clock()
+pygame.font.init()
+textFont = pygame.font.SysFont("arialblack", 30)
+huevo = egg.egg()
 
 # LOAD IMAGES
 
@@ -43,17 +52,75 @@ def quitGame():
     pygame.quit()
     sys.exit()
 
+def resetPressed():
+    global spacePressed, spaceReleased
+    spacePressed = False
+    spaceReleased = False
+
+def drawStage():
+    global surface, state
+    surface.fill((0, 0, 0))
+    if state == "menuScreen":
+        renderedText = textFont.render('Pulsa espacio', 2, (255, 255, 255))
+        surface.blit(renderedText, (350, 350))
+
+    elif state == "playing":
+        # Para dibujar los palos
+
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 1000, 30))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 30, 700))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 670, 1000, 30))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 1000, 30))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(970, 0, 30, 700))
+
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 475, 350, 30))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(650, 475, 350, 30))
+
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 250, 200, 30))
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(800, 250, 200, 30))
+
+        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(350, 250, 300, 30))
+
+
+# STATE FUNCTIONS
+
+def menuScreen():
+    pass
+
+def playing():
+    global timeForEggs
+    if (GAME_TIME.get_ticks() - TIMEBETWEENEGGS) >= timeForEggs:
+        print("Nuevo huevo por favor")
+        huevera.append(egg.egg())
+        timeForEggs = GAME_TIME.get_ticks()
+    for eachEgg in huevera:
+        eachEgg.draw(surface)
+
 # MAIN LOOP
 
 while True:
+    drawStage()
     # Handle user and system events
     for event in GAME_EVENTS.get():
         if event.type == pygame.KEYDOWN:
-            pass
+            if event.key == pygame.K_SPACE:
+                spacePressed = True
+                spaceReleased = False
         if event.type == pygame.KEYUP:
-            pass
+            if event.key == pygame.K_SPACE:
+                spacePressed = False
+                spaceReleased = True
         if event.type == GAME_GLOBALS.QUIT:
             quitGame()
 
-clock.tick(FPS)
-pygame.display.update()
+    if state == "menuScreen":
+        menuScreen()
+        if spaceReleased:
+            state = "playing"
+            resetPressed()
+
+    elif state == "playing":
+        playing()
+
+    clock.tick(FPS)
+    pygame.display.update()
