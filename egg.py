@@ -12,26 +12,38 @@ import pygame, random
 
 class egg:
     def __init__(self):
-        self.WIDTH = 30
-        self.HEIGHT = 40
+        self.WIDTH = 50
+        self.HEIGHT = 65
         self.platform = random.randint(1, 6)
+        self.imageList = [[
+            pygame.image.load("assets/images/egg/egg1.png"),
+            pygame.image.load("assets/images/egg/egg2.png"),
+            pygame.image.load("assets/images/egg/egg3.png")
+        ], [
+            pygame.image.load("assets/images/egg/egg1bomb.png"),
+            pygame.image.load("assets/images/egg/egg2bomb.png"),
+            pygame.image.load("assets/images/egg/egg3bomb.png")
+        ]]
+        self.imageToDraw = self.imageList[0][random.randint(0, 2)]
+
         if self.platform >= 1 and self.platform <= 3:
-            self.posY = 210 # La posición Y desde el punto de arriba a la izquierda de la imagen
+            self.posY = 200 # La posición Y desde el punto de arriba a la izquierda de la imagen
             if self.platform == 1:
-                self.posX = random.randint(30, 170)
+                self.posX = random.randint(30, 155)
             elif self.platform == 2:
-                self.posX = random.randint(350, 620)
+                self.posX = random.randint(350, 605)
             elif self.platform == 3:
-                self.posX = random.randint(800, 940)
+                self.posX = random.randint(800, 925)
         if self.platform >= 4 and self.platform <= 5:
-            self.posY = 435
+            self.posY = 425
             if self.platform == 4:
-                self.posX = random.randint(30, 320)
+                self.posX = random.randint(30, 305)
             elif self.platform == 5:
-                self.posX = random.randint(650, 940)
+                self.posX = random.randint(650, 925)
         if self.platform == 6:
-            self.posY = 630
+            self.posY = 620
             self.posX = random.randint(30, 940)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
+        #pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
+        surface.blit(self.imageToDraw, (self.posX, self.posY))
