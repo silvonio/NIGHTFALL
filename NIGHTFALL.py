@@ -22,6 +22,9 @@ state = "menuScreen" # Para indicar en que parte del juego estamos
 
 spacePressed = False
 spaceReleased = False
+aPressed = False
+dPressed = False
+wPressed = False
 huevera = [] # Para guardar todos los objetos huevo
 timeForEggs = 3000 # Para almacenar el instante en el que se ha creado el último huevo
 timeForTitle = GAME_TIME.get_ticks() # Para almecenar el instante del último parpadeo
@@ -34,7 +37,7 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 700
 FPS = 30
 TIMEBETWEENEGGS = 3000
-GAMEDURATION = 10000 # Los milisegundos que dura una partida
+GAMEDURATION = 120000 # Los milisegundos que dura una partida
 LIGHTCHANGES = [(0, 0), (200, 1), (500, 0), (800, 1), (850, 0), (1000, 1), (1100, 0), (1300, 1)]
 
 # PYGAME OBJECTS
@@ -46,6 +49,7 @@ clock = GAME_TIME.Clock()
 pygame.font.init()
 textFont = pygame.font.SysFont("arialblack", 30)
 huevo = egg.egg()
+alien = player.player('alien', 100, 570)
 
 # LOAD IMAGES
 
@@ -124,14 +128,21 @@ def menuScreen():
     pass
 
 def playing():
-    global timeForEggs
+    global timeForEggs, WINDOW_WIDTH
     if (GAME_TIME.get_ticks() - TIMEBETWEENEGGS) >= timeForEggs:
         print("Nuevo huevo por favor")
         huevera.append(egg.egg())
         timeForEggs = GAME_TIME.get_ticks()
     for eachEgg in huevera:
         eachEgg.draw(surface)
-
+    alien.draw(surface)
+    if aPressed:
+        alien.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'left')
+    if dPressed:
+        alien.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'right')
+    if wPressed:
+        alien.jump()
+    alien.move(WINDOW_WIDTH, WINDOW_HEIGHT)
 # MAIN LOOP
 
 while True:
@@ -142,10 +153,22 @@ while True:
             if event.key == pygame.K_SPACE:
                 spacePressed = True
                 spaceReleased = False
+            if event.key == pygame.K_a:
+                aPressed = True
+            if event.key == pygame.K_d:
+                dPressed = True
+            if event.key == pygame.K_w:
+                wPressed = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 spacePressed = False
                 spaceReleased = True
+            if event.key == pygame.K_a:
+                aPressed = False
+            if event.key == pygame.K_d:
+                dPressed = False
+            if event.key == pygame.K_w:
+                wPressed = False
         if event.type == GAME_GLOBALS.QUIT:
             quitGame()
 
