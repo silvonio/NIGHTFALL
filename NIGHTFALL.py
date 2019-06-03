@@ -47,7 +47,7 @@ surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT),pygame.RESIZABLE
 pygame.display.set_caption('NIGHTFALL')
 clock = GAME_TIME.Clock()
 pygame.font.init()
-textFont = pygame.font.SysFont("arialblack", 30)
+textFont = pygame.font.Font("assets/fonts/nasalization-rg.ttf", 30)
 huevo = egg.egg()
 alien = player.player('alien', 100, 570)
 
@@ -98,7 +98,9 @@ def drawStage():
         surface.fill((0, 0, 0))
         drawTitle()
         renderedText = textFont.render('Pulsa espacio', 2, (255, 255, 255))
-        surface.blit(renderedText, (350, 400))
+        rect = renderedText.get_rect()
+        rect.center = (500, 600)
+        surface.blit(renderedText, rect)
 
     elif state == "playing":
         time = GAME_TIME.get_ticks() - initTime

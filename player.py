@@ -27,16 +27,19 @@ class player:
         if direction == 'right' and (self.posX + self.WIDTH) <= (WINDOW_WIDTH-30):
             self.posX += self.VELX
         if self.jumping:
-            if self.posY <= (WINDOW_HEIGHT - 30 - self.HEIGHT):
-                print('estoy saltando :P')
-                self.posY -= self.acJump
-                self.acJump -= 0.4
+            print('estoy saltando :P')
+            self.posY -= self.acJump
+            self.acJump -= 0.4
+            if self.acJump < 0 and self.posY >= (WINDOW_HEIGHT - 30 - self.HEIGHT):
+                self.jumping = False
+                print('puedes volver a saltar')
 
 
     def jump(self):
         if self.jumping == False:
+            print('quiero saltar :V')
             self.jumping = True
-            self.energyJump = self.posY - 500
+            self.acJump = 15
 
 
     def draw(self, surface):
