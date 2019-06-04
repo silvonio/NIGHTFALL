@@ -19,7 +19,7 @@ class player:
         self.posY = posY
         self.VELX = 15
         self.jumping = False # Para indicar cuando está saltando
-        self.acJump = 15 # La aceleración del salto
+        self.acJump = 0 # La aceleración del salto, se cambia su valor desde jump()
 
     def move(self, WINDOW_WIDTH, WINDOW_HEIGHT, direction = None):
         if direction == 'left' and self.posX >= 30:
@@ -30,9 +30,10 @@ class player:
             print('estoy saltando :P')
             self.posY -= self.acJump
             self.acJump -= 0.4
-            if self.acJump < 0 and self.posY >= (WINDOW_HEIGHT - 30 - self.HEIGHT):
-                self.jumping = False
-                print('puedes volver a saltar')
+            if self.acJump < 0:
+                if self.posY >= (WINDOW_HEIGHT - 30 - self.HEIGHT) or (self.posY >= (475 - self.HEIGHT) and (self.posX >= 30 and self.posX <= (350 - self.WIDTH)) or (self.posX >= 650 and self.posX <= (WINDOW_WIDTH - 30 - self.WIDTH))):
+                    self.jumping = False
+                    print('puedes volver a saltar')
 
 
     def jump(self):
