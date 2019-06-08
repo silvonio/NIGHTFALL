@@ -15,6 +15,7 @@ class egg:
         self.WIDTH = 50
         self.HEIGHT = 65
         self.platform = random.randint(1, 6)
+        self.delete = False # Para saber si se debe eliminar el huevo
         self.imageList = [[
             pygame.image.load("assets/images/egg/egg1.png"),
             pygame.image.load("assets/images/egg/egg2.png"),
@@ -43,6 +44,16 @@ class egg:
         if self.platform == 6:
             self.posY = 620
             self.posX = random.randint(30, 940)
+
+    def checkPosition(self, playerPos, PLAYERDIMENSIONS):
+        if ((playerPos[0][0] > self.posX and playerPos[0][0] < (self.posX + self.WIDTH))\
+                or ((playerPos[0][0] + PLAYERDIMENSIONS[0]) > self.posX and (playerPos[0][0] + PLAYERDIMENSIONS[0]) < (self.posX + self.WIDTH)))\
+                and (self.posY > playerPos[0][1] and self.posY < (playerPos[0][1] + PLAYERDIMENSIONS[1])):
+            return 'alien'
+        if ((playerPos[1][0] > self.posX and playerPos[1][0] < (self.posX + self.WIDTH))\
+                or ((playerPos[1][0] + PLAYERDIMENSIONS[0]) > self.posX and (playerPos[1][0] + PLAYERDIMENSIONS[0]) < (self.posX + self.WIDTH)))\
+                and (self.posY > playerPos[1][1] and self.posY < (playerPos[1][1] + PLAYERDIMENSIONS[1])):
+            return 'humanoid'
 
     def draw(self, surface):
         #pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))

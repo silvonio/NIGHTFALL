@@ -11,16 +11,19 @@ This is the main file
 import pygame, random
 
 class player:
-    def __init__(self, type, posX, posY):
+    def __init__(self, type, posX, posY, PLAYERDIMENSIONS):
         self.type = type # puede ser alien o humanoid
-        self.WIDTH = 70
-        self.HEIGHT = 100
+        self.WIDTH = PLAYERDIMENSIONS[0]
+        self.HEIGHT = PLAYERDIMENSIONS[1]
         self.posX = posX
         self.posY = posY
         self.VELX = 15
         self.jumping = False # Para indicar cuando está saltando
         self.acJump = 0 # La aceleración del salto, se cambia su valor desde jump()
-
+        if self.type == "alien":
+            self.color = (0, 255, 0)
+        else:
+            self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     def move(self, WINDOW_WIDTH, WINDOW_HEIGHT, direction = None):
         if direction == 'left' and self.posX >= 30:
             self.posX -= self.VELX
@@ -35,6 +38,9 @@ class player:
                     self.jumping = False
                     print('puedes volver a saltar')
 
+    def getPos(self):
+        return [self.posX, self.posY]
+
 
     def jump(self):
         if self.jumping == False:
@@ -44,4 +50,4 @@ class player:
 
 
     def draw(self, surface):
-        pygame.draw.rect(surface, (255, 255, 255), pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
+        pygame.draw.rect(surface, self.color, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
