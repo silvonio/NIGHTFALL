@@ -149,7 +149,6 @@ def menuScreen():
 def playing():
     global timeForEggs, WINDOW_WIDTH, alienPoints, humanoidPoints
     if (GAME_TIME.get_ticks() - TIMEBETWEENEGGS) >= timeForEggs:
-        print("Nuevo huevo por favor")
         huevera.append(egg.egg())
         timeForEggs = GAME_TIME.get_ticks()
     for i, eachEgg in enumerate(huevera):
@@ -186,7 +185,13 @@ def playing():
         humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'right')
     if upPressed:
         humanoid.jump()
+    if downPressed:
+        humanoid.shoot()
     humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT)
+    if alien.harm():
+        humanoid.paralyze()
+    if humanoid.harm():
+        alien.paralyze()
 
 def gameOver():
     renderedText = textFont.render('Ha ganado ' + winner, 2, (255, 255, 255))

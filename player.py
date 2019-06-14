@@ -19,6 +19,7 @@ class player:
         self.STAGESIZES = STAGESIZES
         self.GRAVITY = 0.4 # Lo que se le resta a posY
         self.CHARGETIME = 3000 # Tiempo mínimo entre cada disparo
+        self.TIMEPARALYZED = 5000 # Tiempo que el jugador permanecerá paralizado
         self.posX = posX
         self.posY = posY
         self.VELX = 15
@@ -29,6 +30,8 @@ class player:
         self.shooting = False # Variable para indicar si está disparando
         self.shootTime = 0 # El instante del último disparo
         self.paralyzed = False # Si el jugador está paralizado
+        self.paralysisInstant = None # Para almacenar el instante cuando el jugador queda paralizado
+        self.attacking = False # Para saber cuando ha dañado al otro jugador
         if self.type == "alien":
             self.color = (0, 255, 0)
             self.direction = 'right' # La dirección a la que apunta
@@ -67,27 +70,37 @@ class player:
             self.bullet.append([self.posX + (self.WIDTH / 2), self.posY + (self.HEIGHT / 2), self.direction])
             self.shooting = False
             self.shootTime = self.GAME_TIME.get_ticks()
+        # PARÁLISIS
+        if self.paralyzed:
+            if self.GAME_TIME.get_ticks() - self.paralysisInstant >= self.TIMEPARALYZED:
+                self.paralyzed = False
 
     def getPos(self):
         return [self.posX, self.posY]
 
 
     def jump(self):
-        if self.overPlatform:
+        if self.overPlatform and not self.paralyzed:
             self.jumping = True
             self.acJump = 15
             self.overPlatform = False
 
     def shoot(self):
-        if self.GAME_TIME.get_ticks() - self.CHARGETIME >= self.shootTime and not self.shooting:
+        if self.GAME_TIME.get_ticks() - self.shootTime >= self.CHARGETIME and not self.shooting and not self.paralyzed:
             self.shooting = True
 
     def paralyze(self):
         if not self.paralyzed:
-            self.paralyze = True
+            self.paralyzed = True
+            self.paralysisInstant = self.GAME_TIME.get_ticks()
+
+    def harm(self):
+        if self.attacking:
+            self.attacking = False
+            return True
 
     def draw(self, surface, otherPlayerPos):
-        for bullet in self.bullet:
+        for i, bullet in enumerate(self.bullet):
             surface.blit(self.bulletImage, (bullet[0], bullet[1]))
             if bullet[2] == 'left':
                 bullet[0] -= 20
@@ -97,5 +110,9 @@ class player:
                     or ((bullet[0] + 15) > otherPlayerPos[0] and (bullet[0] + 15) < (otherPlayerPos[0] + self.WIDTH))) \
                     and ((bullet[1] > otherPlayerPos[1] and bullet[1] < (otherPlayerPos[1] + self.HEIGHT)) \
                     or ((bullet[1] + 15) > otherPlayerPos[1] and (bullet[1] + 15) < (otherPlayerPos[1] + self.HEIGHT))):
-                print('TOCADO')
+                self.attacking = True
+                self.bullet.pop(i)
+            if bullet[0] > self.STAGESIZES[0][2] or bullet[0] < 0:
+                self.bullet.pop(i)
+                print('eliminado')
         pygame.draw.rect(surface, self.color, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
