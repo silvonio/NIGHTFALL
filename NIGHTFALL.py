@@ -25,9 +25,11 @@ spaceReleased = False
 aPressed = False
 dPressed = False
 wPressed = False
+sPressed = False
 upPressed = False
 rightPressed = False
 leftPressed = False
+downPressed = False
 huevera = [] # Para guardar todos los objetos huevo
 alienPoints = 0 # El número de huevos del alien
 humanoidPoints = 0 # El número de huevos del humano
@@ -42,6 +44,9 @@ initTime = None # Para almacenar el instante de inicio del juego
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 700
 FPS = 30
+STAGESIZES = [(0, 0, 1000, 30), (0, 0, 30, 700), (0, 670, 1000, 30), (970, 0, 30, 700),
+              (0, 475, 350, 30), (650, 475, 350, 30),
+              (0, 250, 200, 30), (800, 250, 200, 30), (350, 250, 300, 30)] # El tamaño de las partes del escenario
 TIMEBETWEENEGGS = 3000
 GAMEDURATION = 120000 # Los milisegundos que dura una partida
 LIGHTCHANGES = [(0, 0), (200, 1), (500, 0), (800, 1), (850, 0), (1000, 1), (1100, 0), (1300, 1)]
@@ -56,8 +61,8 @@ clock = GAME_TIME.Clock()
 pygame.font.init()
 textFont = pygame.font.Font("assets/fonts/nasalization-rg.ttf", 30)
 huevo = egg.egg()
-alien = player.player('alien', 100, 570, PLAYERDIMENSIONS)
-humanoid = player.player("humanoid", WINDOW_WIDTH-170, 570, PLAYERDIMENSIONS)
+alien = player.player('alien', 100, 570, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
+humanoid = player.player("humanoid", WINDOW_WIDTH-170, 570, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
 
 # LOAD IMAGES
 
@@ -122,7 +127,6 @@ def drawStage():
         pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 1000, 30))
         pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 30, 700))
         pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 670, 1000, 30))
-        pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 0, 1000, 30))
         pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(970, 0, 30, 700))
 
         pygame.draw.rect(surface, (255, 0, 0), pygame.Rect(0, 475, 350, 30))
@@ -156,8 +160,8 @@ def playing():
         if eachEgg.checkPosition([alien.getPos(), humanoid.getPos()], PLAYERDIMENSIONS) == 'humanoid':
             huevera.pop(i)
             humanoidPoints += 1
-    alien.draw(surface)
-    humanoid.draw(surface)
+    alien.draw(surface, humanoid.getPos())
+    humanoid.draw(surface, alien.getPos())
 
     # Para dibujar los puntos
     renderedText = textFont.render(str(alienPoints), 2, (255, 255, 255))
@@ -172,6 +176,8 @@ def playing():
         alien.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'right')
     if wPressed:
         alien.jump()
+    if sPressed:
+        alien.shoot()
     alien.move(WINDOW_WIDTH, WINDOW_HEIGHT)
     # Controles Humanoide
     if leftPressed:
@@ -204,12 +210,16 @@ while True:
                 dPressed = True
             if event.key == pygame.K_w:
                 wPressed = True
+            if event.key == pygame.K_s:
+                sPressed = True
             if event.key == pygame.K_RIGHT:
                 rightPressed = True
             if event.key == pygame.K_LEFT:
                 leftPressed = True
             if event.key == pygame.K_UP:
                 upPressed = True
+            if event.key == pygame.K_DOWN:
+                downPressed = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 spacePressed = False
@@ -220,12 +230,16 @@ while True:
                 dPressed = False
             if event.key == pygame.K_w:
                 wPressed = False
+            if event.key == pygame.K_s:
+                sPressed = False
             if event.key == pygame.K_RIGHT:
                 rightPressed = False
             if event.key == pygame.K_LEFT:
                 leftPressed = False
             if event.key == pygame.K_UP:
                 upPressed = False
+            if event.key == pygame.K_DOWN:
+                downPressed = False
         if event.type == GAME_GLOBALS.QUIT:
             quitGame()
 
@@ -241,7 +255,7 @@ while True:
         if GAME_TIME.get_ticks() - initTime >= GAMEDURATION:
             if alienPoints > humanoidPoints:
                 winner = 'alien'
-            if humanoidPoints > alienPoints:
+            elif humanoidPoints > alienPoints:
                 winner = 'humanoid'
             else:
                 winner = 'tie'
