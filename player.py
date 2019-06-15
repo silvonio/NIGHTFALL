@@ -17,7 +17,7 @@ class player:
         self.WIDTH = PLAYERDIMENSIONS[0]
         self.HEIGHT = PLAYERDIMENSIONS[1]
         self.STAGESIZES = STAGESIZES
-        self.GRAVITY = 0.4 # Lo que se le resta a posY
+        self.GRAVITY = 0.7 # Lo que se le resta a posY
         self.CHARGETIME = 3000 # Tiempo mínimo entre cada disparo
         self.TIMEPARALYZED = 5000 # Tiempo que el jugador permanecerá paralizado
         self.posX = posX
@@ -33,36 +33,61 @@ class player:
         self.paralysisInstant = None # Para almacenar el instante cuando el jugador queda paralizado
         self.attacking = False # Para saber cuando ha dañado al otro jugador
         if self.type == "alien":
-            self.color = (0, 255, 0)
+            self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.direction = 'right' # La dirección a la que apunta
         else:
             self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             self.direction = 'left'
         self.bulletImage = pygame.image.load("assets/images/player/bullet/bullet.png")
+
+    # Función que devuelve True cuando el personaje está dentro de la plataforma
+    def inPlat(self, plat):
+        isIn = []
+        point = []
+        point.append((self.posX, self.posY + self.HEIGHT+1))
+        point.append((self.posX+self.WIDTH, self.posY + self.HEIGHT+1))
+        for p in point:
+            isIn.append(p[0]>plat[0] and p[0]<plat[0]+plat[2] and p[1]>plat[1] and p[1] < plat[1]+plat[3])
+        for i in isIn:
+            if i:
+                return True
+        return False
+
+    def whichPlat(self):
+        for i, plat in enumerate(self.STAGESIZES):
+            if self.inPlat(plat):
+                return i
+        return -1
+
     def move(self, WINDOW_WIDTH, WINDOW_HEIGHT, direction = None):
-        if direction == 'left' and self.posX >= 30 and not self.paralyzed:
+        if direction == 'left' and self.posX >= 30 and not self.paralyzed and self.posX > self.STAGESIZES[0][3]:
             self.posX -= self.VELX
             self.direction = 'left'
-        if direction == 'right' and (self.posX + self.WIDTH) <= (WINDOW_WIDTH-30) and not self.paralyzed:
+        if direction == 'right' and (self.posX + self.WIDTH) <= (WINDOW_WIDTH-30) and not self.paralyzed and self.posX + self.WIDTH < self.STAGESIZES[0][2]:
             self.posX += self.VELX
             self.direction = 'right'
-        if not self.overPlatform and not self.jumping and self.posY < (self.STAGESIZES[2][1] - self.HEIGHT):
+        if self.posX < self.STAGESIZES[0][3]:
+            self.posX = self.STAGESIZES[0][3]
+        if self.posX + self.WIDTH > self.STAGESIZES[0][2] - 30:
+            self.posX = self.STAGESIZES[0][2] - 30 - self.WIDTH
+        if not self.overPlatform and not self.jumping and self.whichPlat() == -1:
             self.acJump -= self.GRAVITY
             self.posY -= self.acJump
         elif not self.jumping:
             self.acJump = 0
-            self.posY = self.STAGESIZES[2][1] - self.HEIGHT
-            self.overPlatform = True
-
-        elif self.jumping :
+            if not self.overPlatform:
+                self.posY = self.STAGESIZES[self.whichPlat()][1] - self.HEIGHT
+                self.overPlatform = True
+            if self.whichPlat() == -1:
+                self.overPlatform = False
+        elif self.jumping and self.posY >= self.STAGESIZES[1][2]:
             self.acJump -= self.GRAVITY
             self.posY -= self.acJump
-            #self.posY -= self.acJump
-            #self.acJump -= self.GRAVITY
             if self.acJump < 0:
-            #    if self.posY >= (WINDOW_HEIGHT - 30 - self.HEIGHT) or (self.posY >= (475 - self.HEIGHT) and (self.posX >= 30 and self.posX <= (350 - self.WIDTH)) or (self.posX >= 650 and self.posX <= (WINDOW_WIDTH - 30 - self.WIDTH))):
                 self.jumping = False
-            #   print('puedes volver a saltar')
+        if self.posY < self.STAGESIZES[1][2]:
+            self.posY = self.STAGESIZES[1][2]
+            self.acJump = 0
 
         # DISPARO
         if self.shooting:
@@ -82,7 +107,7 @@ class player:
     def jump(self):
         if self.overPlatform and not self.paralyzed:
             self.jumping = True
-            self.acJump = 15
+            self.acJump = 19
             self.overPlatform = False
 
     def shoot(self):
@@ -114,5 +139,4 @@ class player:
                 self.bullet.pop(i)
             if bullet[0] > self.STAGESIZES[0][2] or bullet[0] < 0:
                 self.bullet.pop(i)
-                print('eliminado')
         pygame.draw.rect(surface, self.color, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))

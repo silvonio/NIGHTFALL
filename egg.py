@@ -25,7 +25,12 @@ class egg:
             pygame.image.load("assets/images/egg/egg2bomb.png"),
             pygame.image.load("assets/images/egg/egg3bomb.png")
         ]]
-        self.imageToDraw = self.imageList[0][random.randint(0, 2)]
+        if random.randint(1, 10) > 8: # Si el número es mayor que 8 será un huevo bomba (20% posibilidades)
+            self.type = 'bomb'
+            self.imageToDraw = self.imageList[1][random.randint(0, 2)]
+        else:
+            self.type = 'normal'
+            self.imageToDraw = self.imageList[0][random.randint(0, 2)]
 
         if self.platform >= 1 and self.platform <= 3:
             self.posY = 200 # La posición Y desde el punto de arriba a la izquierda de la imagen
@@ -49,12 +54,17 @@ class egg:
         if ((playerPos[0][0] > self.posX and playerPos[0][0] < (self.posX + self.WIDTH))\
                 or ((playerPos[0][0] + PLAYERDIMENSIONS[0]) > self.posX and (playerPos[0][0] + PLAYERDIMENSIONS[0]) < (self.posX + self.WIDTH)))\
                 and (self.posY > playerPos[0][1] and self.posY < (playerPos[0][1] + PLAYERDIMENSIONS[1])):
-            return 'alien'
+            if self.type == 'normal':
+                return 'alien'
+            else:
+                return 'alienParalyze'
         if ((playerPos[1][0] > self.posX and playerPos[1][0] < (self.posX + self.WIDTH))\
                 or ((playerPos[1][0] + PLAYERDIMENSIONS[0]) > self.posX and (playerPos[1][0] + PLAYERDIMENSIONS[0]) < (self.posX + self.WIDTH)))\
                 and (self.posY > playerPos[1][1] and self.posY < (playerPos[1][1] + PLAYERDIMENSIONS[1])):
-            return 'humanoid'
+            if self.type == 'normal':
+                return 'humanoid'
+            else:
+                return 'humanoidParalyze'
 
     def draw(self, surface):
-        #pygame.draw.rect(surface, (255, 255, 0), pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
         surface.blit(self.imageToDraw, (self.posX, self.posY))

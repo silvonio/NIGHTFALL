@@ -60,9 +60,8 @@ pygame.display.set_caption('NIGHTFALL')
 clock = GAME_TIME.Clock()
 pygame.font.init()
 textFont = pygame.font.Font("assets/fonts/nasalization-rg.ttf", 30)
-huevo = egg.egg()
-alien = player.player('alien', 100, 570, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
-humanoid = player.player("humanoid", WINDOW_WIDTH-170, 570, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
+alien = player.player('alien', 100, 575, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
+humanoid = player.player("humanoid", WINDOW_WIDTH-170, 575, PLAYERDIMENSIONS, STAGESIZES, GAME_TIME)
 
 # LOAD IMAGES
 
@@ -159,6 +158,12 @@ def playing():
         if eachEgg.checkPosition([alien.getPos(), humanoid.getPos()], PLAYERDIMENSIONS) == 'humanoid':
             huevera.pop(i)
             humanoidPoints += 1
+        if eachEgg.checkPosition([alien.getPos(), humanoid.getPos()], PLAYERDIMENSIONS) == 'alienParalyze':
+            huevera.pop(i)
+            alien.paralyze()
+        if eachEgg.checkPosition([alien.getPos(), humanoid.getPos()], PLAYERDIMENSIONS) == 'humanoidParalyze':
+            huevera.pop(i)
+            humanoid.paralyze()
     alien.draw(surface, humanoid.getPos())
     humanoid.draw(surface, alien.getPos())
 
