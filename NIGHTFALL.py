@@ -48,7 +48,7 @@ STAGESIZES = [(0, 0, 1000, 30), (0, 0, 30, 700), (0, 670, 1000, 30), (970, 0, 30
               (0, 475, 350, 30), (650, 475, 350, 30),
               (0, 250, 200, 30), (800, 250, 200, 30), (350, 250, 300, 30)] # El tamaño de las partes del escenario
 TIMEBETWEENEGGS = 3000
-GAMEDURATION = 12000 # Los milisegundos que dura una partida
+GAMEDURATION = 120000 # Los milisegundos que dura una partida
 LIGHTCHANGES = [(0, 0), (200, 1), (500, 0), (800, 1), (850, 0), (1000, 1), (1100, 0), (1300, 1)]
 PLAYERDIMENSIONS = [70, 100] # La anchura y la altura de los jugadores
 
@@ -70,6 +70,7 @@ titleImage = [
     pygame.image.load("assets/images/background/off.png"),
     pygame.image.load("assets/images/background/on.png")
 ]
+background = pygame.image.load("assets/images/background/skyline.png")
 
 # FUNCTIONS
 
@@ -126,6 +127,7 @@ def drawStage():
         time = GAME_TIME.get_ticks() - initTime
         surface.fill((map(0,GAMEDURATION,160,50,time), map(0,GAMEDURATION,220,0,time), map(0,GAMEDURATION,185,0,time)))
         drawSun(map(0,GAMEDURATION,-50,WINDOW_HEIGHT+50, time),(255,map(0,GAMEDURATION,255,50,time),0))
+        surface.blit(background, (0, 0))
 
         # Para dibujar los palos
 

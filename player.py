@@ -20,7 +20,7 @@ class player:
         self.GRAVITY = 3.8 # Lo que se le resta a posY
         self.CHARGETIME = 3000 # Tiempo mínimo entre cada disparo
         self.TIMESHOOTING = 100 # El tiempo que tendrá puesta la imágen del disparo
-        self.TIMEPARALYZED = 5000 # Tiempo que el jugador permanecerá paralizado
+        self.TIMEPARALYZED = 4000 # Tiempo que el jugador permanecerá paralizado
         self.STEPTIME = 100 # Tiempo entre cada paso
         self.posX = posX
         self.posY = posY
@@ -41,23 +41,23 @@ class player:
         self.attacking = False # Para saber cuando ha dañado al otro jugador
         if self.type == "alien":
             self.imageList = [
-                (255, 0, 0), # notMoving
-                (0, 255, 0), # walking1
-                (0, 0, 255), # walking2
-                (255, 0, 255), # jumping
-                (255, 255, 255), # shooting
-                (0, 0, 0) # paralyzed
+                pygame.image.load("assets/images/player/alien/notMoving.png"), # notMoving
+                pygame.image.load("assets/images/player/alien/walking1.png"), # walking1
+                pygame.image.load("assets/images/player/alien/walking2.png"), # walking2
+                pygame.image.load("assets/images/player/alien/jumping.png"), # jumping
+                pygame.image.load("assets/images/player/alien/shooting.png"), # shooting
+                pygame.image.load("assets/images/player/alien/paralyzed.png") # paralyzed
             ]
             self.imageToDraw = self.imageList[0]
             self.direction = 'right' # La dirección a la que apunta
         else:
             self.imageList = [
-                (255, 0, 0),  # notMoving
-                (0, 255, 0),  # walking1
-                (0, 0, 255),  # walking2
-                (255, 0, 255),  # jumping
-                (255, 255, 255),  # shooting
-                (0, 0, 0)  # paralyzed
+                pygame.image.load("assets/images/player/soldier/notMoving.png"),  # notMoving
+                pygame.image.load("assets/images/player/soldier/walking1.png"),  # walking1
+                pygame.image.load("assets/images/player/soldier/walking2.png"),  # walking2
+                pygame.image.load("assets/images/player/soldier/jumping.png"),  # jumping
+                pygame.image.load("assets/images/player/soldier/shooting.png"),  # shooting
+                pygame.image.load("assets/images/player/soldier/paralyzed.png")  # paralyzed
             ]
             self.imageToDraw = self.imageList[0]
             self.direction = 'left'
@@ -201,4 +201,8 @@ class player:
             self.imageToDraw = self.imageList[4]
         if self.paralyzed:
             self.imageToDraw = self.imageList[5]
-        pygame.draw.rect(surface, self.imageToDraw, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
+        if self.direction == 'right':
+            surface.blit(self.imageToDraw, (self.posX, self.posY))
+        elif self.direction == 'left':
+            transformedImage = pygame.transform.flip(self.imageToDraw, 1, 0)
+            surface.blit(transformedImage, (self.posX, self.posY))
