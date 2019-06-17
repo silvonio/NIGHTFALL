@@ -5,7 +5,7 @@ Created on Fri May 24 18:21:31 2019
 
 @author: Silvia Mena González y Antonio Muñoz Santiago
 
-This is an object file
+This is a class file
 """
 
 import pygame, random
@@ -17,12 +17,15 @@ class player:
         self.WIDTH = PLAYERDIMENSIONS[0]
         self.HEIGHT = PLAYERDIMENSIONS[1]
         self.STAGESIZES = STAGESIZES
-        self.GRAVITY = 0.7 # Lo que se le resta a posY
+        self.GRAVITY = 3.8 # Lo que se le resta a posY
         self.CHARGETIME = 3000 # Tiempo mínimo entre cada disparo
+        self.TIMESHOOTING = 100 # El tiempo que tendrá puesta la imágen del disparo
         self.TIMEPARALYZED = 5000 # Tiempo que el jugador permanecerá paralizado
+        self.STEPTIME = 100 # Tiempo entre cada paso
         self.posX = posX
         self.posY = posY
         self.VELX = 15
+        self.MAXVEL = -30 # La velocidad máxima que alcanza cayendo
         self.jumping = False # Para indicar cuando está saltando
         self.acJump = 0 # La aceleración del salto, se cambia su valor desde jump()
         self.overPlatform = False
@@ -31,14 +34,39 @@ class player:
         self.shootTime = 0 # El instante del último disparo
         self.paralyzed = False # Si el jugador está paralizado
         self.paralysisInstant = None # Para almacenar el instante cuando el jugador queda paralizado
+        self.lastStep = 0 # Para almacenar el instante del último paso
+        self.lastWalkingImage = 1 # La última imágen de andar
+        self.walking = False # Para saber si esta andando y está en una plataforma
+        self.pointing = False # Para indicar si está apuntando
         self.attacking = False # Para saber cuando ha dañado al otro jugador
         if self.type == "alien":
-            self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            self.imageList = [
+                (255, 0, 0), # notMoving
+                (0, 255, 0), # walking1
+                (0, 0, 255), # walking2
+                (255, 0, 255), # jumping
+                (255, 255, 255), # shooting
+                (0, 0, 0) # paralyzed
+            ]
+            self.imageToDraw = self.imageList[0]
             self.direction = 'right' # La dirección a la que apunta
         else:
-            self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            self.imageList = [
+                (255, 0, 0),  # notMoving
+                (0, 255, 0),  # walking1
+                (0, 0, 255),  # walking2
+                (255, 0, 255),  # jumping
+                (255, 255, 255),  # shooting
+                (0, 0, 0)  # paralyzed
+            ]
+            self.imageToDraw = self.imageList[0]
             self.direction = 'left'
         self.bulletImage = pygame.image.load("assets/images/player/bullet/bullet.png")
+
+        # LOAD SOUNDS
+
+        self.chargeSound = pygame.mixer.Sound('assets/sounds/charge.ogg')
+        self.shootSound = pygame.mixer.Sound('assets/sounds/shoot.ogg')
 
     # Función que devuelve True cuando el personaje está dentro de la plataforma
     def inPlat(self, plat):
@@ -63,16 +91,24 @@ class player:
         if direction == 'left' and self.posX >= 30 and not self.paralyzed and self.posX > self.STAGESIZES[0][3]:
             self.posX -= self.VELX
             self.direction = 'left'
+            if self.overPlatform:
+                self.walking = True
         if direction == 'right' and (self.posX + self.WIDTH) <= (WINDOW_WIDTH-30) and not self.paralyzed and self.posX + self.WIDTH < self.STAGESIZES[0][2]:
             self.posX += self.VELX
             self.direction = 'right'
+            if self.overPlatform:
+                self.walking = True
+        if direction == None:
+            self.walking = False
         if self.posX < self.STAGESIZES[0][3]:
             self.posX = self.STAGESIZES[0][3]
         if self.posX + self.WIDTH > self.STAGESIZES[0][2] - 30:
             self.posX = self.STAGESIZES[0][2] - 30 - self.WIDTH
         if not self.overPlatform and not self.jumping and self.whichPlat() == -1:
-            self.acJump -= self.GRAVITY
+            if self.acJump > self.MAXVEL:
+                self.acJump -= self.GRAVITY
             self.posY -= self.acJump
+            self.walking = False
         elif not self.jumping:
             self.acJump = 0
             if not self.overPlatform:
@@ -95,6 +131,9 @@ class player:
             self.bullet.append([self.posX + (self.WIDTH / 2), self.posY + (self.HEIGHT / 2), self.direction])
             self.shooting = False
             self.shootTime = self.GAME_TIME.get_ticks()
+        if self.GAME_TIME.get_ticks() - self.shootTime >= self.TIMESHOOTING and self.pointing:
+            self.pointing = False
+            self.chargeSound.play()
         # PARÁLISIS
         if self.paralyzed:
             if self.GAME_TIME.get_ticks() - self.paralysisInstant >= self.TIMEPARALYZED:
@@ -107,12 +146,15 @@ class player:
     def jump(self):
         if self.overPlatform and not self.paralyzed:
             self.jumping = True
-            self.acJump = 19
+            self.acJump = 48
             self.overPlatform = False
+            self.walking = False
 
     def shoot(self):
         if self.GAME_TIME.get_ticks() - self.shootTime >= self.CHARGETIME and not self.shooting and not self.paralyzed:
             self.shooting = True
+            self.pointing = True
+            self.shootSound.play()
 
     def paralyze(self):
         if not self.paralyzed:
@@ -125,6 +167,7 @@ class player:
             return True
 
     def draw(self, surface, otherPlayerPos):
+        # Para dibujar las balas
         for i, bullet in enumerate(self.bullet):
             surface.blit(self.bulletImage, (bullet[0], bullet[1]))
             if bullet[2] == 'left':
@@ -139,4 +182,23 @@ class player:
                 self.bullet.pop(i)
             if bullet[0] > self.STAGESIZES[0][2] or bullet[0] < 0:
                 self.bullet.pop(i)
-        pygame.draw.rect(surface, self.color, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))
+        # Para dibujar al jugador
+        if not self.walking and not self.jumping and self.overPlatform:
+            self.imageToDraw = self.imageList[0]
+        elif not self.walking and not self.jumping and not self.overPlatform:
+            self.imageToDraw = self.imageList[3]
+        elif self.walking:
+            if self.GAME_TIME.get_ticks() - self.lastStep >= self.STEPTIME:
+                if self.lastWalkingImage == 1:
+                    self.lastWalkingImage = 2
+                else:
+                    self.lastWalkingImage = 1
+                self.lastStep = self.GAME_TIME.get_ticks()
+            self.imageToDraw = self.imageList[self.lastWalkingImage]
+        elif self.jumping:
+            self.imageToDraw = self.imageList[3]
+        if self.pointing:
+            self.imageToDraw = self.imageList[4]
+        if self.paralyzed:
+            self.imageToDraw = self.imageList[5]
+        pygame.draw.rect(surface, self.imageToDraw, pygame.Rect(self.posX, self.posY, self.WIDTH, self.HEIGHT))

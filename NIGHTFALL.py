@@ -48,13 +48,14 @@ STAGESIZES = [(0, 0, 1000, 30), (0, 0, 30, 700), (0, 670, 1000, 30), (970, 0, 30
               (0, 475, 350, 30), (650, 475, 350, 30),
               (0, 250, 200, 30), (800, 250, 200, 30), (350, 250, 300, 30)] # El tamaño de las partes del escenario
 TIMEBETWEENEGGS = 3000
-GAMEDURATION = 120000 # Los milisegundos que dura una partida
+GAMEDURATION = 12000 # Los milisegundos que dura una partida
 LIGHTCHANGES = [(0, 0), (200, 1), (500, 0), (800, 1), (850, 0), (1000, 1), (1100, 0), (1300, 1)]
 PLAYERDIMENSIONS = [70, 100] # La anchura y la altura de los jugadores
 
 # PYGAME OBJECTS
 
 pygame.display.init()
+pygame.mixer.init()
 surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT),pygame.RESIZABLE)
 pygame.display.set_caption('NIGHTFALL')
 clock = GAME_TIME.Clock()
@@ -70,10 +71,6 @@ titleImage = [
     pygame.image.load("assets/images/background/on.png")
 ]
 
-
-
-# LOAD SOUNDS
-
 # FUNCTIONS
 
 def quitGame():
@@ -84,6 +81,15 @@ def resetPressed():
     global spacePressed, spaceReleased
     spacePressed = False
     spaceReleased = False
+
+def music(i):
+    pygame.mixer.stop()
+    if i == 'menu':
+        pygame.mixer.music.load('assets/music/initLoop.ogg')
+        pygame.mixer.music.play(-1)
+    elif i == 'inGame':
+        pygame.mixer.music.load('assets/music/playingLoop.ogg')
+        pygame.mixer.music.play(-1)
 
 def drawSun(posY, color):
     global surface
@@ -176,36 +182,42 @@ def playing():
     # Controles del alien
     if aPressed:
         alien.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'left')
-    if dPressed:
+    elif dPressed:
         alien.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'right')
+    else:
+        alien.move(WINDOW_WIDTH, WINDOW_HEIGHT)
     if wPressed:
         alien.jump()
     if sPressed:
         alien.shoot()
-    alien.move(WINDOW_WIDTH, WINDOW_HEIGHT)
     # Controles Humanoide
     if leftPressed:
         humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'left')
-    if rightPressed:
+    elif rightPressed:
         humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT, 'right')
+    else:
+        humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT)
     if upPressed:
         humanoid.jump()
     if downPressed:
         humanoid.shoot()
-    humanoid.move(WINDOW_WIDTH, WINDOW_HEIGHT)
     if alien.harm():
         humanoid.paralyze()
     if humanoid.harm():
         alien.paralyze()
 
 def gameOver():
-    renderedText = textFont.render('Ha ganado ' + winner, 2, (255, 255, 255))
+    if winner == 'alien':
+        renderedText = textFont.render('¡La Tierra ha sido conquistada! :D', 2, (255, 255, 255))
+    else:
+        renderedText = textFont.render('¡Has salvado la Tierra! :D', 2, (255, 255, 255))
     rect = renderedText.get_rect()
     rect.center = (500, 450)
     surface.blit(renderedText, rect)
 
 # MAIN LOOP
 
+music('menu')
 while True:
     drawStage()
     # Handle user and system events
@@ -257,6 +269,8 @@ while True:
         menuScreen()
         if spaceReleased:
             state = "playing"
+            pygame.mixer.music.fadeout(500)
+            music('inGame')
             initTime = GAME_TIME.get_ticks()
             resetPressed()
 
@@ -270,6 +284,7 @@ while True:
             else:
                 winner = 'tie'
             state = "gameOver"
+            pygame.mixer.music.stop()
 
     elif state == "gameOver":
         gameOver()
