@@ -4,19 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/NIGHTFALL.py" line="107" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="702e7a08-0367-4455-ad1f-70a9826c1cb9" name="Default Changelist" comment="Arreglado el salto y añadidos los huevos bomba">
+    <list default="true" id="702e7a08-0367-4455-ad1f-70a9826c1cb9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NIGHTFALL.py" beforeDir="false" afterPath="$PROJECT_DIR$/NIGHTFALL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/player/Soldier0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/player/Soldierwalk1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/player/Soldierwalk2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/player/alien/Alien.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/humanoid walk 1pistol.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/humanoid walk0pistol.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/humanoidrpistol.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/skyline.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/skylinef.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +17,7 @@
     <session id="1872850851">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.102" value="2" />
           <entry key="project.open.time.107" value="1" />
           <entry key="project.open.time.122" value="1" />
@@ -47,78 +36,32 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="10" />
+          <entry key="py" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Python" value="10" />
+          <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="223" />
           <entry key="py" value="17844" />
-          <entry key="txt" value="544" />
+          <entry key="txt" value="565" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="544" />
+          <entry key="PLAIN_TEXT" value="565" />
           <entry key="Python" value="18067" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/NIGHTFALL.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="217" column="29" selection-start-line="217" selection-start-column="17" selection-end-line="217" selection-end-column="29" />
-              <folding>
-                <element signature="e#171#197#0" expanded="true" />
-                <marker date="1560794022258" expanded="true" signature="3013:3481" ph="..." />
-                <marker date="1560794022258" expanded="true" signature="3509:3563" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/player.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="207" column="66" lean-forward="true" selection-start-line="207" selection-start-column="66" selection-end-line="207" selection-end-column="66" />
-              <folding>
-                <marker date="1560794013831" expanded="true" signature="206:207" ph="..." />
-                <marker date="1560794013831" expanded="true" signature="4083:4217" ph="..." />
-                <marker date="1560794013831" expanded="true" signature="4279:4288" ph="..." />
-                <marker date="1560794013831" expanded="true" signature="6625:6670" ph="..." />
-                <marker date="1560794013831" expanded="true" signature="6685:7379" ph="..." />
-                <marker date="1560794013831" expanded="true" signature="7287:7379" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/egg.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="47" column="17" selection-start-line="47" selection-start-column="17" selection-end-line="47" selection-end-column="17" />
-              <folding>
-                <marker date="1560721651082" expanded="true" signature="203:204" ph="..." />
-                <marker date="1560721651082" expanded="true" signature="276:1932" ph="..." />
-                <marker date="1560721651082" expanded="true" signature="2935:2941" ph="..." />
-                <marker date="1560721651082" expanded="true" signature="2965:2966" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -157,10 +100,14 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="H:/NIGHTFALL/egg.py" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pyautogui" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -290,19 +237,32 @@
       <option name="project" value="LOCAL" />
       <updated>1560604984167</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="TERMINADO TODO :D">
+      <created>1560794440998</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1560794440998</updated>
+    </task>
+    <task id="LOCAL-00013" summary="TERMINADO TODO x2 :D">
+      <created>1560794568092</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1560794568092</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33442622" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.33442622" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -349,7 +309,9 @@
     <MESSAGE value="Hecho el disparo" />
     <MESSAGE value="Terminada la parálisis cuando te disparan" />
     <MESSAGE value="Arreglado el salto y añadidos los huevos bomba" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglado el salto y añadidos los huevos bomba" />
+    <MESSAGE value="TERMINADO TODO :D" />
+    <MESSAGE value="TERMINADO TODO x2 :D" />
+    <option name="LAST_COMMIT_MESSAGE" value="TERMINADO TODO x2 :D" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -435,7 +397,7 @@
     <entry file="file://$PROJECT_DIR$/player.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
-          <caret line="207" column="66" lean-forward="true" selection-start-line="207" selection-start-column="66" selection-end-line="207" selection-end-column="66" />
+          <caret line="207" column="66" selection-start-line="207" selection-start-column="66" selection-end-line="207" selection-end-column="66" />
           <folding>
             <marker date="1560794013831" expanded="true" signature="206:207" ph="..." />
             <marker date="1560794013831" expanded="true" signature="4083:4217" ph="..." />
@@ -449,8 +411,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/NIGHTFALL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="217" column="29" selection-start-line="217" selection-start-column="17" selection-end-line="217" selection-end-column="29" />
+        <state relative-caret-position="272">
+          <caret line="219" column="11" lean-forward="true" selection-start-line="219" selection-start-column="11" selection-end-line="219" selection-end-column="11" />
           <folding>
             <element signature="e#171#197#0" expanded="true" />
             <marker date="1560794022258" expanded="true" signature="3013:3481" ph="..." />
@@ -458,6 +420,9 @@
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
